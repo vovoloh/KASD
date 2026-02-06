@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+public class Program
+{
+    public static void Main()
+    {
+        string[] input = Console.ReadLine().Split();
+        int n = int.Parse(input[0]);
+        int m = int.Parse(input[1]);
+        List<int>[] graph = new List<int>[n];
+        for (int i = 0; i < n; i++)
+            graph[i] = new List<int>();
+        int[] inDeg = new int[n];
+        for (int i = 0; i < m; i++)
+        {
+            input = Console.ReadLine().Split();
+            int u = int.Parse(input[0]) - 1;
+            int v = int.Parse(input[1]) - 1;
+            graph[u].Add(v);
+            inDeg[v]++;
+        }
+        Queue<int> queue = new Queue<int>();
+        for (int i = 0; i < n; i++)
+        {
+            if (inDeg[i] == 0)
+                queue.Enqueue(i);
+        }
+        List<int> res = new List<int>();
+        while (queue.Count > 0)
+        {
+            int u = queue.Dequeue();
+            res.Add(u + 1);
+            foreach (int v in graph[u])
+            {
+                inDeg[v]-=1;
+                if (inDeg[v] == 0)
+                    queue.Enqueue(v);
+            }
+        }
+        if (res.Count != n)
+        {
+            Console.WriteLine(-1);
+        }
+        else
+        {
+            Console.WriteLine(string.Join(" ", res));
+        }
+    }
+}
